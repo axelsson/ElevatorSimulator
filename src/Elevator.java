@@ -1,10 +1,12 @@
+import java.util.ArrayList;
+
 public class Elevator {
 //Sarah test kommentar
   //mappning från våningstryck till hissobjekt? 
-	int levels = 1;
+	int floors = 1;
 	int entrance = 0;
 	//control panel 
-	int currentlyAtLevel = 0;
+	int currentlyAtFloor = 0;
 	//busy; false = standing still, true = moving
 	boolean busy = false;
 	//direction: 0 = not moving, 1= up, 2 = down
@@ -13,14 +15,18 @@ public class Elevator {
 	int capacity = 8;	//may be changed
 	//time for picking up/leaving people
 	//velocity while moving between levels
+	ArrayList<Boolean> buttonsPressed;
 
 	//entrance may not be needed
-	public Elevator(int levels, int entrance) {
-
+	public Elevator(int floors, int entrance) {
+		for (int i = 0; i < floors; i++) {
+			buttonsPressed.add(false);
+		}
 	}
 
-	public void pressedButton(int destination){
-
+	public ArrayList<Boolean> getButtonsPressed(){
+		
+		return buttonsPressed;
 	}
 
 }
