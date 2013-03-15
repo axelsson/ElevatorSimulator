@@ -22,8 +22,31 @@ public class Floor {
 	
 	public void addPerson(Person p){
 		people.add(p);
-		
+		if(p.getDestination()>index){
+			btnup = 1;
+		}else if(p.getDestination()<index){
+			btndown = 1;
+		}
 	}
+	
+	public ArrayList<Person> getPeople() {
+        return this.people;
+    }
+	
+	public void removePerson(Person p) {
+        people.remove(p);
+    }
+	
+	public ArrayList<Person> getPeopleWaiting() {
+        ArrayList<Person> waiting = new ArrayList<Person>();
+        for (Person person : people){
+            if (!person.isFinished()){
+                waiting.add(person);
+            }
+        }
+        return waiting;
+    }
+	
 }
 	
 	
