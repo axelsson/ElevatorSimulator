@@ -51,6 +51,17 @@ public class Floor {
         return waiting;
     }
 	
+	//Get a list of all the people finished who started on this floor
+	public ArrayList<Person> getPeopleFinished() {
+        ArrayList<Person> finished = new ArrayList<Person>();
+        for (Person person : people){
+            if (person.isFinished()){
+                finished.add(person);
+            }
+        }
+        return finished;
+    }
+	
 	//Returns true if btnUp is pressed 
 	public boolean isbtnUpOn() {
 		if(btnUp == 1){
