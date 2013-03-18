@@ -11,6 +11,7 @@ public class Person {
 		this.currentlyAt = atFloor;
 		this.destination = dest;
 		this.id = id;
+		//fel, vill använda diskret tidssteg?
 		this.startTimeInSystem = System.currentTimeMillis();
 	}
 	

@@ -29,7 +29,8 @@ public class Elevator {
 	
 	// move the elevator a timestep
 	public void timeStep(){
-		
+		//if elevator stops at a floor, add some time (continue looping without action) to 
+		// simulate time for people entering/exiting the elevator
 	}
 
 }

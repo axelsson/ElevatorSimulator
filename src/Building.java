@@ -27,11 +27,27 @@ public class Building {
 
 		run();
 	}
-
+	public Person generatePerson(){
+		return new Person(floors, floors, floors);
+		//generates persons with a poisson distribution
+	}
 
 	private void run() {
-		// TODO Auto-generated method stub
-		//ElevatorStrategy []strategies={Simple, Zone};
+		// creates the different strategies and puts them in a list to be accessible
+		BasicStrat Simple = new BasicStrat();
+		ZoneStrat Zone = new ZoneStrat();
+		ElevatorStrategy [] strategies={Simple , Zone};
+		
+		while (true){
+			//generate person from poisson distribution
+			Person newPerson = generatePerson();
+			int handlingElevator = strategies[1].getElevator(newPerson.getPosition(), newPerson.getDestination());
+			//decide which elevator will handle the request
+			//put the request (person) in queue for handlingElevator
+			//timestep 
+			elev1.timeStep();
+			elev2.timeStep();
+		}
 
 	}
 
