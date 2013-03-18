@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 public class Elevator {
 //Sarah test kommentar
   //mappning från våningstryck till hissobjekt? 
@@ -16,7 +15,6 @@ public class Elevator {
 	//time for picking up/leaving people
 	//velocity while moving between levels
 	ArrayList<Boolean> buttonsPressed;
-
 	//entrance may not be needed
 	public Elevator(int floors, int entrance) {
 		for (int i = 0; i < floors; i++) {
@@ -27,6 +25,11 @@ public class Elevator {
 	public ArrayList<Boolean> getButtonsPressed(){
 		
 		return buttonsPressed;
+	}
+	
+	// move the elevator a timestep
+	public void timeStep(){
+		
 	}
 
 }
