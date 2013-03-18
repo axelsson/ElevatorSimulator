@@ -11,14 +11,14 @@ public class Building {
 	private ArrayList<Floor> floorList;
 
 
-	public Building(int nrfloors, int nrElevators) { //id = vilken våning, maxFloor = vilken översta våningen är
+	public Building(int nrfloors, int nrElevators) { //id = vilken vï¿½ning, maxFloor = vilken ï¿½versta vï¿½ningen ï¿½r
 		// TODO Auto-generated constructor stub
 		floors = nrfloors;
 		elev1 = new Elevator(floors,0);
 		elev2 = new Elevator(floors,0);
 		nrElevators = 2;
 
-		//FOR-loop för att initiera alla floors
+		//FOR-loop fï¿½r att initiera alla floors
 		for (int j = 0; j < floors; j++) {
 			tempFloor = new Floor(j, (floors-1));
 			floorList.add(tempFloor);
@@ -31,6 +31,7 @@ public class Building {
 
 	private void run() {
 		// TODO Auto-generated method stub
+		//ElevatorStrategy []strategies={Simple, Zone};
 
 	}
 
