@@ -9,14 +9,14 @@ public class Building {
 	private Elevator elev2;
 	private Floor tempFloor;
 	private ArrayList<Floor> floorList;
-
+	private Elevator[] elevators= new Elevator[2]; 
 
 	public Building(int nrfloors, int nrElevators) { //id = vilken v�ning, maxFloor = vilken �versta v�ningen �r
 		// TODO Auto-generated constructor stub
 		floors = nrfloors;
-		elev1 = new Elevator(floors,0);
-		elev2 = new Elevator(floors,0);
-		nrElevators = 2;
+		elevators[0] = new Elevator(floors,0);
+		elevators[1] = new Elevator(floors,0);
+		nrElevators = elevators.length;
 
 		//FOR-loop f�r att initiera alla floors
 		for (int j = 0; j < floors; j++) {
@@ -41,12 +41,16 @@ public class Building {
 		while (true){
 			//generate person from poisson distribution
 			Person newPerson = generatePerson();
-			int handlingElevator = strategies[1].getElevator(newPerson.getPosition(), newPerson.getDestination());
+			int handlingElevator = strategies[1].getElevator(newPerson.getPosition(), newPerson.getDestination(), elevators);
+			//adds the new request to the chosen elevator
+			elevators[handlingElevator].addToQueue(newPerson.getDestination());
+			
 			//decide which elevator will handle the request
 			//put the request (person) in queue for handlingElevator
 			//timestep 
-			elev1.timeStep();
-			elev2.timeStep();
+			for (Elevator elevator : elevators) {
+				elevator.timeStep();
+			}
 		}
 
 	}
