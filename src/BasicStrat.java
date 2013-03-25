@@ -45,7 +45,6 @@ public class BasicStrat implements ElevatorStrategy{
 					elevators[i].direction = p.getDirection();
 				}
 			}
-				
 			}
 		}
 	}

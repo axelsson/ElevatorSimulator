@@ -5,20 +5,20 @@ public class Person {
 	private int destination;
 	//direction: 0 = not moving, 1= up, 2 = down
 	int direction = 0;	
-	private long startTimeInSystem;
+	private int startTime, waitingTime, totalTime;
 	private int id;
 	private boolean finished = false;
 	
-	public Person(int id, int dest, int atFloor) {
+	public Person(int id, int dest, int atFloor, int time) {
 		this.currentlyAt = atFloor;
 		this.destination = dest;
+		this.startTime = time;
 		this.id = id;
 		if (currentlyAt < destination){
 			destination = 1;
 		}
 		else{destination = 2;}
 		//fel, vill använda diskret tidssteg?
-		this.startTimeInSystem = System.currentTimeMillis();
 	}
 	
 	public int getDirection(){
@@ -27,6 +27,19 @@ public class Person {
 	public int getDestination(){
 		return this.destination;
 	}
+	
+	public void setStartTime(int time){
+		startTime = time;
+	}
+	
+	public void setWaitingTime(int time){
+		waitingTime = time-startTime;
+	}
+
+	public void setTotalTime(int time){
+		totalTime = time-startTime;
+	}
+	
 	
 	public int getID(){
 		return this.id;
@@ -41,16 +54,12 @@ public class Person {
 	}
 
 		//sets the person as finished and returns the total time in system.
-	public long setFinished(){
-		this.finished = true;
-		return (System.currentTimeMillis() - this.startTimeInSystem);
+	public void setFinished(){
+		finished = true;
 	}
-	
 	public boolean isFinished(){
 		return this.finished;
 	}
 	
-	public long getWaitingTime(){
-		return (System.currentTimeMillis() - this.startTimeInSystem);
 	}
-}
+

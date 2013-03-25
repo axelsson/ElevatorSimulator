@@ -16,8 +16,7 @@ public class Elevator {
 	//velocity while moving between levels
 	ArrayList<Boolean> buttonsPressed;
 	ArrayList<Person> personsInside;
-    PriorityQueue<Integer> queue = new PriorityQueue<Integer>(10, new Comparator<Integer>() {
-    	
+    PriorityQueue<Integer> queue = new PriorityQueue<Integer>(10, new Comparator<Integer>() {	
     		//compare sorts the queue in different orders depending on the direction of the elevator
 			public int compare(Integer o1, Integer o2) {
 				switch (direction){
@@ -44,11 +43,6 @@ public class Elevator {
 		}
 	}
 
-	//PriorityQueue(int initialCapacity, Comparator<? super E> comparator) 
-	//Creates a PriorityQueue with the specified initial capacity that orders its elements according to the specified comparator.
-	//entrance may not be needed
-
-
 	public ArrayList<Boolean> getButtonsPressed(){
 		return buttonsPressed;
 	}
@@ -59,8 +53,7 @@ public class Elevator {
 		//check if request exists
 	}
 	// move the elevator a timestep
-	public void timeStep(ArrayList<Floor> floorList){
-		// kör queue.poll(); nångång 
+	public void timeStep(ArrayList<Floor> floorList, int time){
 		//if elevator stops at a floor, add some time (continue looping without action) to 
 		// simulate time for people entering/exiting the elevator
 		//EN kö för requests, såväl externa som interna. när man kommer till en våning med requests så
@@ -77,6 +70,7 @@ public class Elevator {
 					if (person.getDestination() == currentlyAtFloor){
 						personsInside.remove(person);
 						//TODO take care of of timestamps 
+						person.setTotalTime(time);
 						person.setFinished();
 					}
 				}
@@ -87,9 +81,11 @@ public class Elevator {
 			for (Person person : floor.getPeople()) {
 				if (person.getDirection() == direction){
 					personsInside.add(person);
+					person.setWaitingTime(time);
 					//	TODO start travel time for person
 				}
 			}
+			queue.poll();
 		}
 
 	}

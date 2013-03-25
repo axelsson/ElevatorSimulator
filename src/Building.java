@@ -9,9 +9,11 @@ public class Building {
 	private int id = 1;
 	private ArrayList<Floor> floorList;
 	private Elevator[] elevators= new Elevator[2]; 
+	public int time; 
 
 	public Building(int nrfloors, int nrElevators) { //id = vilken v�ning, maxFloor = vilken �versta v�ningen �r
 		floors = nrfloors;
+		time = 0;
 		elevators[0] = new Elevator(floors,0);
 		elevators[1] = new Elevator(floors,0);
 		nrElevators = elevators.length;
@@ -26,7 +28,7 @@ public class Building {
 		run();
 	}
 	public Person generatePerson(){
-		return new Person(id, 2, 0);
+		return new Person(id, 2, 0, time);
 		//generates persons with help from a poisson distribution
 	}
 
@@ -40,23 +42,18 @@ public class Building {
 		
 
 		//eller for, med diskret tidssteg till en viss tid 
-		//while (true){
+		while (true){
 			//generate person from poisson distribution
 			Person newPerson = generatePerson();
 			id++;
-			//getElevator places the new person in the right queue. 
-			strategies[1].getElevator(newPerson, elevators);
-			//adds the new request to the chosen elevator
-			//request from outside or inside elevator
-			//så länge riktning stämmer gör det ingen skillnad, för att: annars plockar du bara upp folk på vägen
-
-			//decide which elevator will handle the request
-			//put the request (person) in queue for handlingElevator
+			//getElevator places the new person in the right queue and handles waiting persons
+			strategies[0].getElevator(newPerson, elevators);
 			//timestep 
 			for (Elevator elevator : elevators) {
-				elevator.timeStep(floorList);
+				elevator.timeStep(floorList, time);
 			}
-		//}
+			time++;
+		}
 
 	}
 
