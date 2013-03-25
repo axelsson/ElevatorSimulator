@@ -37,7 +37,7 @@ public class Building {
 		ElevatorStrategy [] strategies={Simple , Zone};
 
 		PoissonDistribution generator = new PoissonDistribution(50);
-	
+		
 
 		//eller for, med diskret tidssteg till en viss tid 
 		//while (true){

@@ -3,6 +3,8 @@ public class Person {
 	
 	private int currentlyAt;
 	private int destination;
+	//direction: 0 = not moving, 1= up, 2 = down
+	int direction = 0;	
 	private long startTimeInSystem;
 	private int id;
 	private boolean finished = false;
@@ -11,10 +13,17 @@ public class Person {
 		this.currentlyAt = atFloor;
 		this.destination = dest;
 		this.id = id;
+		if (currentlyAt < destination){
+			destination = 1;
+		}
+		else{destination = 2;}
 		//fel, vill använda diskret tidssteg?
 		this.startTimeInSystem = System.currentTimeMillis();
 	}
 	
+	public int getDirection(){
+		return this.direction;
+	}
 	public int getDestination(){
 		return this.destination;
 	}

@@ -19,6 +19,8 @@ public class Elevator {
 	ArrayList<Person> personsInside;
 	//måste speca ordning på kön, använd .comparator
 	PriorityQueue queue = new PriorityQueue();
+	//PriorityQueue(int initialCapacity, Comparator<? super E> comparator) 
+	//Creates a PriorityQueue with the specified initial capacity that orders its elements according to the specified comparator.
 	//entrance may not be needed
 	public Elevator(int floors, int entrance) {
 		for (int i = 0; i < floors; i++) {
@@ -38,34 +40,36 @@ public class Elevator {
 	}
 	// move the elevator a timestep
 	public void timeStep(ArrayList<Floor> floorList){
-		queue.poll();
+		// kör queue.poll(); nångång 
 		//if elevator stops at a floor, add some time (continue looping without action) to 
 		// simulate time for people entering/exiting the elevator
 		//EN kö för requests, såväl externa som interna. när man kommer till en våning med requests så
 		// kollar man om nån av personerna i hissen har det som request samt kollar om det floor man befinner sig
 		//på har folk som vill åka i rätt riktning
-		//get ON or get OFF, add or remove people in the elevator
-		//for internal requests -> remove persons from elevator
-		if (queue.contains(this.currentlyAtFloor)==true ){
-			//om den befinner sig på ett floor där nån har tryckt på en knapp,
-			//så ska någon/några personer gå av 
-			personsInside.remove(null);
-		}
-		//for external requests -> add persons to elevator
-		Floor floor = floorList.get(currentlyAtFloor);
-		boolean floorDown = floor.isbtnDownOn();
-		boolean floorUp = floor.isbtnUpOn();
-		if ((floorDown == true && direction == 2)|(floorUp == true && direction == 1)){
-			floor = floorList.get(currentlyAtFloor);
-			ArrayList<Person> people = floor.getPeople();
-			for (Person person : people) {
-				person.getDestination();
 
+		// kollar om hissen stannar/ska stanna
+		if (queue.contains(this.currentlyAtFloor)==true ){
+
+			//if someone has requested to get off at this floor
+			if (buttonsPressed.get(this.currentlyAtFloor) == true){
+				// remove affected from elevator
+				for (Person person : personsInside) {
+					if (person.getDestination() == currentlyAtFloor){
+						personsInside.remove(person);
+						//TODO take care of of timestamps 
+						person.setFinished();
+					}
+				}
 			}
 
-			//function for reaching the current floor
-			//floor.getPersons
-			personsInside.add(null);
+			// add persons to elevator
+			Floor floor = floorList.get(currentlyAtFloor);
+			for (Person person : floor.getPeople()) {
+				if (person.getDirection() == direction){
+					personsInside.add(person);
+					//	TODO start travel time for person
+				}
+			}
 		}
 
 	}
