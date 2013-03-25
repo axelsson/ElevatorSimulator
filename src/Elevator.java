@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 public class Elevator {
 	//Sarah test kommentar
@@ -7,29 +8,48 @@ public class Elevator {
 	int entrance = 0;
 	//control panel 
 	int currentlyAtFloor = 0;
-	//busy; false = standing still, true = moving
-	boolean busy = false;
 	//direction: 0 = not moving, 1= up, 2 = down
-	int direction = 0;	
+	public int direction = 0;	
 	int destination;
 	int capacity = 8;	//may be changed
 	//time for picking up/leaving people
 	//velocity while moving between levels
 	ArrayList<Boolean> buttonsPressed;
 	ArrayList<Person> personsInside;
+    PriorityQueue<Integer> queue = new PriorityQueue<Integer>(10, new Comparator<Integer>() {
+    	
+    		//compare sorts the queue in different orders depending on the direction of the elevator
+			public int compare(Integer o1, Integer o2) {
+				switch (direction){
+					case 1: 
+						//up
+						if (o1 > o2){
+							return o2;
+						}
+						else{return o1;}
+					case 2: 
+						//down
+						if (o1 < o2){
+							return o2;
+						}
+						else{return o1;}
+			}
+				return o2; }
+	        });
+    
 	//måste speca ordning på kön, använd .comparator
-	PriorityQueue queue = new PriorityQueue();
-	//PriorityQueue(int initialCapacity, Comparator<? super E> comparator) 
-	//Creates a PriorityQueue with the specified initial capacity that orders its elements according to the specified comparator.
-	//entrance may not be needed
 	public Elevator(int floors, int entrance) {
 		for (int i = 0; i < floors; i++) {
 			buttonsPressed.add(false);
 		}
 	}
 
-	public ArrayList<Boolean> getButtonsPressed(){
+	//PriorityQueue(int initialCapacity, Comparator<? super E> comparator) 
+	//Creates a PriorityQueue with the specified initial capacity that orders its elements according to the specified comparator.
+	//entrance may not be needed
 
+
+	public ArrayList<Boolean> getButtonsPressed(){
 		return buttonsPressed;
 	}
 
@@ -73,5 +93,6 @@ public class Elevator {
 		}
 
 	}
+	
 
 }

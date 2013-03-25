@@ -44,9 +44,9 @@ public class Building {
 			//generate person from poisson distribution
 			Person newPerson = generatePerson();
 			id++;
-			int handlingElevator = strategies[1].getElevator(newPerson.getPosition(), newPerson.getDestination(), elevators);
+			//getElevator places the new person in the right queue. 
+			strategies[1].getElevator(newPerson, elevators);
 			//adds the new request to the chosen elevator
-			elevators[handlingElevator].addToQueue(newPerson.getDestination());
 			//request from outside or inside elevator
 			//så länge riktning stämmer gör det ingen skillnad, för att: annars plockar du bara upp folk på vägen
 

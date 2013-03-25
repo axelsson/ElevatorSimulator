@@ -2,5 +2,5 @@
 public interface ElevatorStrategy {
 
 	//getElevator decides which elevator will handle the request
-    public abstract int getElevator(int requestAt, int destination, Elevator[] elevators);
+    public abstract void getElevator(Person person, Elevator[] elevators);
 }

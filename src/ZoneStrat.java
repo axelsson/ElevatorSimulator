@@ -5,9 +5,9 @@ public class ZoneStrat implements ElevatorStrategy{
 		// TODO Auto-generated constructor stub
 	}
 
-	public int getElevator(int requestAt, int destination, Elevator[] elevators) {
+	public void getElevator(Person person,Elevator[] elevators) {
 		// TODO Auto-generated method stub
-		return 0;
 	}
+
 
 }
