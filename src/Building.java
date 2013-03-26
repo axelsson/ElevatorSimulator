@@ -8,7 +8,7 @@ public class Building {
 
 	private int floors; // the number of floors in the building
 	private int id = 1;
-	private ArrayList<Floor> floorList;
+	private ArrayList<Floor> floorList = new ArrayList<Floor>();
 	public int time; 
 	public ArrayList<Person> peopleInSystem = new ArrayList<Person>();
 	public ArrayList<Elevator> elevators = new ArrayList<Elevator>();
@@ -22,7 +22,7 @@ public class Building {
 		floors = nrfloors;
 		time = 0;
 		for (int i = 0; i < nrElevators; i++) {
-			elevators.add(new Elevator(floors,0));
+			elevators.add(new Elevator(floors,0, i));
 		}
 
 		//FOR-loop f�r att initiera alla floors
@@ -31,21 +31,27 @@ public class Building {
 			tempFloor = new Floor(j, (floors-1));
 			floorList.add(tempFloor);
 		}
-
-		run();
-		finished();
+	}
+	public static void main(String[] args){
+		Building building = new Building(10,2);
+		building.run();
+		building.finished();
+		//TODO fix exp dist. 
+		ExponentialDistribution e = new ExponentialDistribution(1.0);
+		System.out.println(e.sample());
 	}
 	public Person generatePerson(){
 		int atFloor = 0;
-		int dest = r.nextInt()%floors;
+		int dest = Math.abs(r.nextInt()%floors);
 		//generate new numbers to make sure dest != atFloor
 		while(dest == atFloor){
-			dest = r.nextInt()%floors;
+			dest = Math.abs(r.nextInt()%floors);
 		}
+		System.out.println("new person with destination: " + dest );
 		return new Person(id, dest, atFloor, time);
 		//generates persons with help from a poisson distribution
 	}
-	
+
 	public void finished(){
 		//calculate mean time for waiting and total time when finished
 		int size = peopleInSystem.size();
@@ -55,27 +61,34 @@ public class Building {
 			waitingTime += p.getWaitingTime();
 			totalTime += p.getTotalTime();
 		}
+		System.out.println("*****************************************");
 		System.out.println("Mean total time in system: "+ totalTime/size+"\n"+ "Mean waiting time: "+waitingTime/size);
 	}
 
 	private void run() {
-		//eller for, med diskret tidssteg till en viss tid 
-		ExponentialDistribution e = new ExponentialDistribution(1/10);
-		System.out.println(Math.abs(e.sample()));	
-	    boolean hej = true;
+		boolean hej = true;
 		while (hej){
-			//generate person from poisson distribution
-			Person newPerson = generatePerson();
-			peopleInSystem.add(newPerson);
-			id++;
-			//getElevator places the new person in the right queue and handles waiting persons
-			strategies[0].getElevator(newPerson, elevators);
+			if (r.nextInt()%2 == 1){
+				Person newPerson = generatePerson();
+				//add the new person to their current floor
+				floorList.get(newPerson.getPosition()).addPerson(newPerson);
+				System.out.println("new person generated at time: "+time);
+
+				//generate person from poisson distribution
+				peopleInSystem.add(newPerson);
+				id++;
+				//getElevator places the new person in the right queue and handles waiting persons
+				strategies[0].getElevator(newPerson, elevators);
+			}
 			//timestep 
+			System.out.println("Next timestep at time: "+time);
 			for (Elevator elevator : elevators) {
 				elevator.timeStep(floorList, time);
 			}
-			hej = false;
 			time++;
+			if (time == 100){
+				hej = false;
+			}
 		}
 	}
 

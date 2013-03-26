@@ -4,6 +4,7 @@ import java.util.PriorityQueue;
 public class Elevator {
 	//Sarah test kommentar
 	//mappning från våningstryck till hissobjekt? 
+	int id;
 	int floors = 1;
 	int entrance = 0;
 	//control panel 
@@ -15,8 +16,8 @@ public class Elevator {
 	int capacity = 8;	//may be changed
 	//time for picking up/leaving people
 	//velocity while moving between levels
-	ArrayList<Boolean> buttonsPressed;
-	ArrayList<Person> personsInside;
+	ArrayList<Boolean> buttonsPressed=new ArrayList<Boolean>();
+	ArrayList<Person> personsInside = new ArrayList<Person>();
     PriorityQueue<Integer> queue = new PriorityQueue<Integer>(10, new Comparator<Integer>() {	
     		//compare sorts the queue in different orders depending on the direction of the elevator
 			public int compare(Integer o1, Integer o2) {
@@ -38,7 +39,9 @@ public class Elevator {
 	        });
     
 	//måste speca ordning på kön, använd .comparator
-	public Elevator(int floors, int entrance) {
+	public Elevator(int floors, int entrance, int id1) {
+
+		id = id1;
 		for (int i = 0; i < floors; i++) {
 			buttonsPressed.add(false);
 		}
@@ -46,6 +49,12 @@ public class Elevator {
 
 	public ArrayList<Boolean> getButtonsPressed(){
 		return buttonsPressed;
+	}
+	public void setDirection(int d){
+		this.direction = d;
+	}
+	public int getId(){
+		return id;
 	}
 
 	public void addToQueue(int dest){
@@ -56,19 +65,28 @@ public class Elevator {
 	// move the elevator a timestep
 	public void timeStep(ArrayList<Floor> floorList, int time){
 		//checks if the elevator is picking up/dropping people
+		System.out.println("Elevator: "+this.id);
 		if (wait > 0){
 			time -= 1;
 			return;
 		}
+		// kollar om hissen stannar/ska stanna
+		if (queue.contains(this.currentlyAtFloor)==true ){
+			System.out.println("Elevator stops at floor: "+currentlyAtFloor);
+			requestAtFloor(time, floorList);
+		}
+		//hissen har tömt sin kö, sätts till idle 
+		if (queue.isEmpty()){
+			this.direction = 0;
+		}
 		if (!(direction == 0)){
 			if (direction == 1){
 				currentlyAtFloor++;
+				System.out.println("Elevator moving up to: "+currentlyAtFloor);
 			}
-			else{currentlyAtFloor--;}
-		}
-		// kollar om hissen stannar/ska stanna
-		if (queue.contains(this.currentlyAtFloor)==true ){
-			requestAtFloor(time, floorList);
+			else{currentlyAtFloor--;
+				System.out.println("Elevator moving down to: "+currentlyAtFloor);
+			}
 		}
 	}
 	
@@ -82,6 +100,7 @@ public class Elevator {
 					//TODO take care of of timestamps 
 					person.setTotalTime(time);
 					person.setFinished();
+					System.out.println("Person nr "+person.getID()+ " just got off, total time in system: "+person.getTotalTime());
 				}
 			}
 		}
@@ -92,7 +111,8 @@ public class Elevator {
 			if (person.getDirection() == direction){
 				personsInside.add(person);
 				person.setWaitingTime(time);
-				//	TODO start travel time for person
+				floorList.get(this.currentlyAtFloor).removePerson(person);
+				System.out.println("Person nr "+person.getID()+" just entered the elevator with waitingtime: "+person.getWaitingTime());
 			}
 		}
 		queue.poll();
