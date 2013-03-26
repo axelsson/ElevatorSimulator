@@ -48,6 +48,13 @@ public class Person {
 	public int getPosition(){
 		return this.currentlyAt;
 	}
+	public int getWaitingTime(){
+		return this.waitingTime;
+	}
+	public int getTotalTime(){
+		return this.totalTime;
+	}
+	
 	
 	public void setPosition(int level){
 		this.currentlyAt = level;

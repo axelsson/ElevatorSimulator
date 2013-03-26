@@ -19,30 +19,30 @@ public class BasicStrat implements ElevatorStrategy{
 	}
 
 	//TODO check for full elevator
-	public void getElevator(Person person, Elevator[] elevators) {
+	public void getElevator(Person person, ArrayList<Elevator> elevators) {
 		waitingList.add(person);
 		for (Person p : waitingList) {
-			for (int i = 0; i < elevators.length; i++) {
+			for (int i = 0; i < elevators.size(); i++) {
 				//if both elevator and person is moving up
-				if ((p.getDirection() == elevators[i].direction) && elevators[i].direction == 1) {
-					if (p.getDestination() > elevators[i].currentlyAtFloor){
-						elevators[i].addToQueue(p.getDestination());
+				if ((p.getDirection() == elevators.get(i).direction) && elevators.get(i).direction == 1) {
+					if (p.getDestination() > elevators.get(i).currentlyAtFloor){
+						elevators.get(i).addToQueue(p.getDestination());
 						waitingList.remove(p);
 					}
 				}
 				//if both elevator and person is moving down
-				else if ((p.getDirection() == elevators[i].direction) && elevators[i].direction == 2) {
-					if (p.getDestination() < elevators[i].currentlyAtFloor){
-						elevators[i].addToQueue(p.getDestination());
+				else if ((p.getDirection() == elevators.get(i).direction) && elevators.get(i).direction == 2) {
+					if (p.getDestination() < elevators.get(i).currentlyAtFloor){
+						elevators.get(i).addToQueue(p.getDestination());
 						waitingList.remove(p);
 					}
 				}
 				//if the elevator is idle
-				else if (elevators[i].direction == 0){
-					elevators[i].addToQueue(p.getDestination());
+				else if (elevators.get(i).direction == 0){
+					elevators.get(i).addToQueue(p.getDestination());
 					waitingList.remove(p);
 					//update the elevators direction to not be idle
-					elevators[i].direction = p.getDirection();
+					elevators.get(i).direction = p.getDirection();
 				}
 			}
 			}
