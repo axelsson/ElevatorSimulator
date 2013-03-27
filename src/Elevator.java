@@ -16,7 +16,6 @@ public class Elevator {
 	int capacity = 8;	//may be changed
 	//time for picking up/leaving people
 	//velocity while moving between levels
-	ArrayList<Boolean> buttonsPressed=new ArrayList<Boolean>();
 	ArrayList<Person> personsInside = new ArrayList<Person>();
     PriorityQueue<Integer> queue = new PriorityQueue<Integer>(10, new Comparator<Integer>() {	
     		//compare sorts the queue in different orders depending on the direction of the elevator
@@ -40,16 +39,10 @@ public class Elevator {
     
 	//måste speca ordning på kön, använd .comparator
 	public Elevator(int floors, int entrance, int id1) {
-
+		this.floors = floors;
 		id = id1;
-		for (int i = 0; i < floors; i++) {
-			buttonsPressed.add(false);
-		}
 	}
 
-	public ArrayList<Boolean> getButtonsPressed(){
-		return buttonsPressed;
-	}
 	public void setDirection(int d){
 		this.direction = d;
 	}
@@ -59,13 +52,14 @@ public class Elevator {
 
 	public void addToQueue(int dest){
 		queue.add(dest);
+		System.out.println("elevator "+ this.id + " added " + dest + " to queue");
 		//adds the incoming request to the queue where destination is the drop/pickup place 
 		//check if request exists
 	}
 	// move the elevator a timestep
 	public void timeStep(ArrayList<Floor> floorList, int time){
 		//checks if the elevator is picking up/dropping people
-		System.out.println("Elevator: "+this.id);
+		System.out.println("Elevator "+this.id+ " at floor: "+ this.currentlyAtFloor);
 		if (wait > 0){
 			time -= 1;
 			return;
@@ -84,7 +78,7 @@ public class Elevator {
 				currentlyAtFloor++;
 				System.out.println("Elevator moving up to: "+currentlyAtFloor);
 			}
-			else{currentlyAtFloor--;
+			else{currentlyAtFloor -=1;
 				System.out.println("Elevator moving down to: "+currentlyAtFloor);
 			}
 		}
@@ -92,28 +86,44 @@ public class Elevator {
 	
 	public void requestAtFloor(int time, ArrayList<Floor> floorList){
 		//if someone has requested to get off at this floor
-		if (buttonsPressed.get(this.currentlyAtFloor) == true){
+		if (this.queue.isEmpty()){
+			direction = 0;
+		}
+		if (!personsInside.isEmpty()){
 			// remove affected from elevator
+			ArrayList<Person> temp = new ArrayList<Person>();
 			for (Person person : personsInside) {
 				if (person.getDestination() == currentlyAtFloor){
-					personsInside.remove(person);
-					//TODO take care of of timestamps 
+					temp.add(person);
+					System.out.println("removed person "+person.getID()+ "from elevator "+this.getId());
 					person.setTotalTime(time);
 					person.setFinished();
 					System.out.println("Person nr "+person.getID()+ " just got off, total time in system: "+person.getTotalTime());
 				}
 			}
+			for (Person person : temp) {
+				personsInside.remove(person);
+			}	
 		}
-
 		// add persons to elevator
 		Floor floor = floorList.get(currentlyAtFloor);
+		ArrayList<Person> temp = new ArrayList<Person>();
 		for (Person person : floor.getPeople()) {
-			if (person.getDirection() == direction){
+			//if elevator is idle, it needs to set a direction
+			if (person.getDirection() == direction || direction == 0){
+				if (direction == 0){
+					direction = person.getDirection();
+				}
 				personsInside.add(person);
+				this.addToQueue(person.getDestination());
+				System.out.println("Elevator "+this.id+" just queued person "+person.getID()+ " for floor "+person.getDestination());
 				person.setWaitingTime(time);
-				floorList.get(this.currentlyAtFloor).removePerson(person);
+				temp.add(person);
 				System.out.println("Person nr "+person.getID()+" just entered the elevator with waitingtime: "+person.getWaitingTime());
 			}
+		}
+		for (Person person : temp) {
+			floorList.get(this.currentlyAtFloor).removePerson(person);
 		}
 		queue.poll();
 		time = 20;

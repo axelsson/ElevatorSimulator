@@ -47,7 +47,6 @@ public class Building {
 		while(dest == atFloor){
 			dest = Math.abs(r.nextInt()%floors);
 		}
-		System.out.println("new person with destination: " + dest );
 		return new Person(id, dest, atFloor, time);
 		//generates persons with help from a poisson distribution
 	}
@@ -68,25 +67,26 @@ public class Building {
 	private void run() {
 		boolean hej = true;
 		while (hej){
+			System.out.println("--------------------------------Time: "+time+"---------------------------");
 			if (r.nextInt()%2 == 1){
 				Person newPerson = generatePerson();
 				//add the new person to their current floor
 				floorList.get(newPerson.getPosition()).addPerson(newPerson);
-				System.out.println("new person generated at time: "+time);
+				System.out.println("new person "+  newPerson.getID()+" with destination "+newPerson.getDestination());
 
 				//generate person from poisson distribution
 				peopleInSystem.add(newPerson);
 				id++;
 				//getElevator places the new person in the right queue and handles waiting persons
-				strategies[0].getElevator(newPerson, elevators);
+				strategies[0].addToWaitingList(newPerson);
 			}
+			strategies[0].getElevator(elevators);
 			//timestep 
-			System.out.println("Next timestep at time: "+time);
 			for (Elevator elevator : elevators) {
 				elevator.timeStep(floorList, time);
 			}
 			time++;
-			if (time == 100){
+			if (time == 30){
 				hej = false;
 			}
 		}

@@ -15,9 +15,9 @@ public class Person {
 		this.startTime = time;
 		this.id = id;
 		if (currentlyAt < destination){
-			destination = 1;
+			direction = 1;
 		}
-		else{destination = 2;}
+		else{direction = 2;}
 		//fel, vill använda diskret tidssteg?
 	}
 	
