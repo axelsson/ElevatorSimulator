@@ -65,8 +65,8 @@ public class Building {
 	}
 
 	private void run() {
-		boolean hej = true;
-		while (hej){
+		boolean timer = true;
+		while (timer){
 			System.out.println("--------------------------------Time: "+time+"---------------------------");
 			if (r.nextInt()%2 == 1){
 				Person newPerson = generatePerson();
@@ -87,7 +87,7 @@ public class Building {
 			}
 			time++;
 			if (time == 30){
-				hej = false;
+				timer = false;
 			}
 		}
 	}
