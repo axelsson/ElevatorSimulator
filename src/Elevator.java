@@ -51,7 +51,6 @@ public class Elevator {
 
 	public void addToQueue(int dest){
 		queue.add(dest);
-		System.out.println("elevator "+ this.id + " added " + dest + " to queue");
 		//adds the incoming request to the queue where destination is the drop/pickup place 
 		//check if request exists
 	}

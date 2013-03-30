@@ -13,11 +13,11 @@ public class BasicStrat implements ElevatorStrategy{
 		waitingList.add(p);
 	}
 	//returns the closest idle elevator 
-	public int choseIdle(ArrayList<Elevator> elevators, int personAt){
+	public int choseIdle(ArrayList<Elevator> idleElevators, int personAt){
 		Elevator chosenOne = null;
-		int diff = elevators.get(0).floors;
+		int diff = idleElevators.get(0).floors;
 		int tempDiff = 0;
-		for (Elevator elevator : elevators) {
+		for (Elevator elevator : idleElevators) {
 			tempDiff = Math.abs(personAt - elevator.currentlyAtFloor);
 			if (tempDiff<=diff){
 				chosenOne = elevator;
@@ -28,6 +28,7 @@ public class BasicStrat implements ElevatorStrategy{
 	}
 
 	//kolla om idle är närmare än hiss på rätt väg 
+	//"fel" när folk är köade på en hiss på väg ner och en annan finns idle högre upp 
 	//TODO check for full elevator
 	public void getElevator( ArrayList<Elevator> elevators) {
 
@@ -67,7 +68,7 @@ public class BasicStrat implements ElevatorStrategy{
 				}
 			} 
 			if (!idleElevators.isEmpty()){
-				int chosenElevator = choseIdle(elevators, p.getPosition());
+				int chosenElevator = choseIdle(idleElevators, p.getPosition());
 				elevators.get(chosenElevator);
 				//
 				if (!(elevators.get(chosenElevator).queue.contains(p.getPosition()))){
