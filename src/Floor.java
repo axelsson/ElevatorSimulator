@@ -3,19 +3,17 @@ import java.util.ArrayList;
 
 public class Floor {
 	//Floor
-	private int index; //Vilken våning det är
+	private int index; //Vilken vï¿½ning det ï¿½r
 
 	//Buttons
-	private int btnUp = 0; //0 = ej intryckt, 1 = intryckt
-	private int btnDown = 0;//0 = ej intryckt, 1 = intryckt
+	private boolean btnUp = false; 
+	private boolean btnDown = false;
 	
 	//Persons
 	private ArrayList<Person> people = new ArrayList<Person>();
 	
 	//Constructor
 	public Floor(int id, int maxFloor){
-		btnUp = 0;
-		btnDown = 0;
 		people = new ArrayList<Person>();
 		index = id;
 	}
@@ -23,11 +21,11 @@ public class Floor {
 	//Add an arriving person to the floor.
 	public void addPerson(Person p){
 		people.add(p);
-		if(p.getDestination()>index){
-			btnUp = 1;
-		}else if(p.getDestination()<index){
-			btnDown = 1;
-		}
+//		if(p.getDestination()>index){
+//			btnUp = true;
+//		}else if(p.getDestination()<index){
+//			btnDown = true;
+//		}
 	}
 	
 	//Get a list of people who has been or is on the floor.
@@ -64,28 +62,22 @@ public class Floor {
 	
 	//Returns true if btnUp is pressed 
 	public boolean isbtnUpOn() {
-		if(btnUp == 1){
-			return true;
-		}
-        return false;
+		return btnUp;
     }
 	
 	//Returns true if btnDown is pushed
     public boolean isbtnDownOn() {
-    	if(btnDown == 1){
-    		return true;
-    	}
-        return false;
+    	return btnDown;
     }
 
     //Set the btnUp to pushed(1)
-    public void setbtnUpOn() {
-    	btnUp = 1;
+    public void setbtnUpOn(boolean value) {
+    	btnUp = value;
     }
 
     //set btnDown to pushed(1)
-    public void setbtnDownOn() {
-    	btnDown = 1;
+    public void setbtnDownOn(boolean value) {
+    	btnDown = value;
     }
 	
 	//Get which floor it is.

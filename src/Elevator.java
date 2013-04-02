@@ -23,17 +23,17 @@ public class Elevator {
 			case 1: 
 				//up
 				if (o1 > o2){
-					return o2;
+					return 1;
 				}
-				else{return o1;}
+				else{return -1;}
 			case 2: 
 				//down
 				if (o1 < o2){
-					return o2;
+					return -1;
 				}
-				else{return o1;}
+				else{return 1;}
 			}
-			return o2; }
+			return 1; }
 	});
 
 	//måste speca ordning på kön, använd .comparator
@@ -48,9 +48,11 @@ public class Elevator {
 	public int getId(){
 		return id;
 	}
-
+	//TODO beter sig jättekonstigt om man köar fler än 2, men verkar justera sig och fungera ändå.
 	public void addToQueue(int dest){
-		queue.add(dest);
+		if (!queue.contains(dest)){
+			queue.add(dest);
+		}
 		//adds the incoming request to the queue where destination is the drop/pickup place 
 		//check if request exists
 	}
@@ -91,6 +93,7 @@ public class Elevator {
 				System.out.println("Elevator moving down to: "+currentlyAtFloor);
 			}
 		}
+		System.out.println("Elevator "+ this.id + " queue " + this.queue.toString());
 	}
 
 	public void requestAtFloor(int time, ArrayList<Floor> floorList){
@@ -105,10 +108,9 @@ public class Elevator {
 			for (Person person : personsInside) {
 				if (person.getDestination() == currentlyAtFloor){
 					temp.add(person);
-					System.out.println("removed person "+person.getID()+ "from elevator "+this.getId());
 					person.setTotalTime(time);
 					person.setFinished();
-					System.out.println("Person nr "+person.getID()+ " just got off, total time in system: "+person.getTotalTime());
+					System.out.println("Person "+person.getID()+ " got off from elev "+ this.getId() + " , total time in system: "+person.getTotalTime());
 				}
 			}
 			for (Person person : temp) {
@@ -126,15 +128,21 @@ public class Elevator {
 				}
 				personsInside.add(person);
 				this.addToQueue(person.getDestination());
-				System.out.println("Elevator "+this.id+" just queued person "+person.getID()+ " for floor "+person.getDestination());
 				person.setWaitingTime(time);
+				System.out.println("Elevator "+this.id+" just queued person "+person.getID()+ " for floor "+person.getDestination()+" with waitingtime "+ person.getWaitingTime());
 				temp.add(person);
-				System.out.println("Person nr "+person.getID()+" just entered the elevator with waitingtime: "+person.getWaitingTime());
 			}
 		}
 		//remove persons afterwards to avoid concurrency problem
 		for (Person person : temp) {
-			floorList.get(this.currentlyAtFloor).removePerson(person);
+			floor.removePerson(person);
+			//reset up/down buttons
+			if (person.direction == 1){
+				floor.setbtnUpOn(false);
+			}
+			else if (person.direction == 2){
+				floor.setbtnDownOn(false);
+			}
 		}
 
 		time = 20;
