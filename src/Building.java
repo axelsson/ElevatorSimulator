@@ -3,6 +3,16 @@ import java.util.Random;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 
+/* TODO :
+ * max antal personer i hiss
+ * zonestrat!!!!!!!!!!!!!!!
+ * tidssystem (lägg till för avstigning, påstigning, acceleration)
+ * ankomster med exp
+ * optimering till basic (t ex ha ett defaultfloor)
+ * mer statistik (högsta vänte/totaltiden, fördelning mellan våningar, förhållande mellan väntetid
+ *  och totaltid, total körsträcka per hiss, fördelning mellan hissar) 
+ * dubbelkolla personer i hissen så att folk verkligen kliver av 
+ * */
 public class Building {
 	//represents a building 
 	private boolean arrival;
@@ -34,7 +44,7 @@ public class Building {
 		}
 	}
 	public static void main(String[] args){
-		Building building = new Building(10,2, true);
+		Building building = new Building(6,2, false);
 		building.run();
 		building.finished();
 		//TODO fix exp dist. 
@@ -46,9 +56,10 @@ public class Building {
 	public int arrivalFloor(){
 		// floor 0 is the default entrance of the building
 		int floor = 0;
-		if (arrival = false){
-			floor = r.nextInt()%floors;
+		if (arrival == false){
+			floor = Math.abs(r.nextInt()%floors);
 		}
+		
 		return floor;
 	}
 	public Person generatePerson(){
@@ -78,7 +89,7 @@ public class Building {
 		boolean timer = true;
 		while (timer){
 			System.out.println("--------------------------------Time: "+time+"---------------------------");
-			//generates persons with help from a poisson distribution
+			//generates persons with help from a exponential distribution
 			if (true){
 				Person newPerson = generatePerson();
 				//add the new person to their current floor
@@ -98,7 +109,7 @@ public class Building {
 						strategies[0].addToWaitingList(newPerson);
 					}
 				}
-				System.out.println("new person "+  newPerson.getID()+" with destination "+newPerson.getDestination());
+				System.out.println("new person "+  newPerson.getID()+" at: "+ newPerson.getPosition() +" dest: "+newPerson.getDestination());
 				//generate person from poisson distribution
 				peopleInSystem.add(newPerson);
 				id++;
@@ -108,7 +119,7 @@ public class Building {
 			strategies[0].getElevator(elevators);
 			//timestep 
 			for (Elevator elevator : elevators) {
-				elevator.timeStep(floorList, time);
+				elevator.timeStep(time, floorList);
 			}
 			time++;
 			if (time == 75){

@@ -51,6 +51,7 @@ public class BasicStrat implements ElevatorStrategy{
 		ArrayList<Person> temp = new ArrayList<Person>();
 		ArrayList<Elevator> idleElevators = new ArrayList<Elevator>();
 		for (Person p : waitingList) {
+			boolean foundElevator = false;
 
 			for (int i = 0; i < elevators.size(); i++) {
 				//if both elevator and person is moving up, put the person in queue for pick up
@@ -60,6 +61,7 @@ public class BasicStrat implements ElevatorStrategy{
 						System.out.println("Elevator "+i+ " queues person "+p.getID()+ " request to floor "+p.getPosition() );
 
 						temp.add(p);
+						foundElevator = true;
 						break;
 					}
 				}
@@ -71,6 +73,7 @@ public class BasicStrat implements ElevatorStrategy{
 						System.out.println("Elevator "+i+ " queues person "+p.getID()+ " request to floor "+p.getPosition() );
 
 						temp.add(p);
+						foundElevator = true;
 						break;
 					}
 				}
@@ -80,7 +83,7 @@ public class BasicStrat implements ElevatorStrategy{
 					idleElevators.add(elevators.get(i));
 				}
 			} 
-			if (!idleElevators.isEmpty()){
+			if (!idleElevators.isEmpty() && foundElevator == false){
 				int chosenElevator = choseIdle(idleElevators, p.getPosition());
 				elevators.get(chosenElevator);
 				//
@@ -95,6 +98,7 @@ public class BasicStrat implements ElevatorStrategy{
 		for (Person tempP : temp) {
 			waitingList.remove(tempP);
 		}
+		System.out.println("//////////////////////////////");
 	}
 
 	public int computeDirection(Elevator e, Person p){
