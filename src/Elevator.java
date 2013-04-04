@@ -68,6 +68,7 @@ public class Elevator {
 		System.out.println("in elevator: direction of elevator: "+this.direction);
 
 		//move the elevator one step towards the next queued floor
+		//move towards "default" floor: don't change direction from 0?
 		if (!(direction == 0)){
 			if(queue.peek()>this.currentlyAtFloor){
 				currentlyAtFloor++;

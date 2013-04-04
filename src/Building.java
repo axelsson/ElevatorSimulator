@@ -56,19 +56,26 @@ public class Building {
 	public int arrivalFloor(){
 		// floor 0 is the default entrance of the building
 		int floor = 0;
-		if (arrival == false){
+		if (!arrival){
 			floor = Math.abs(r.nextInt()%floors);
+			while(floor == 0){
+				floor = Math.abs(r.nextInt()%floors);
+			}
 		}
 		
 		return floor;
 	}
 	public Person generatePerson(){
 		int atFloor = arrivalFloor();
-		int dest = Math.abs(r.nextInt()%floors);
-		//generate new numbers until dest != atFloor
-		while(dest == atFloor){
+		int dest = 0;
+		if (arrival){
 			dest = Math.abs(r.nextInt()%floors);
+			//generate new numbers until dest != atFloor
+			while(dest == atFloor){
+				dest = Math.abs(r.nextInt()%floors);
+			}
 		}
+
 		return new Person(id, dest, atFloor, time);
 	}
 

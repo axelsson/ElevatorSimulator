@@ -21,11 +21,6 @@ public class Floor {
 	//Add an arriving person to the floor.
 	public void addPerson(Person p){
 		people.add(p);
-//		if(p.getDestination()>index){
-//			btnUp = true;
-//		}else if(p.getDestination()<index){
-//			btnDown = true;
-//		}
 	}
 	
 	//Get a list of people who has been or is on the floor.
