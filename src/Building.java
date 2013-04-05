@@ -28,7 +28,7 @@ public class Building {
 	ElevatorStrategy [] strategies={Simple , Zone};	
 	Random r = new Random();
 
-	public Building(int nrfloors, int nrElevators, boolean arrivalValue) { //id = vilken v�ning, maxFloor = vilken �versta v�ningen �r
+	public Building(int nrfloors, int nrElevators, boolean arrivalValue) { 
 		arrival = arrivalValue;
 		floors = nrfloors;
 		time = 0;
@@ -44,7 +44,7 @@ public class Building {
 		}
 	}
 	public static void main(String[] args){
-		Building building = new Building(6,2, false);
+		Building building = new Building(5,2, true);
 		building.run();
 		building.finished();
 		//TODO fix exp dist. 

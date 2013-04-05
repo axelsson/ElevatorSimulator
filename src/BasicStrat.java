@@ -48,24 +48,28 @@ public class BasicStrat implements ElevatorStrategy{
 				//if both elevator and person is moving up, put the person in queue for pick up
 				if ((p.getDirection() == elev.direction) && elev.direction == 1) {
 					if (p.getPosition() >= elevators.get(i).currentlyAtFloor){
-						elev.addToQueue(p.getPosition());
-						System.out.println("1: Elevator "+i+ " queues person "+p.getID()+ " request to floor "+p.getPosition() );
-
-						temp.add(p);
-						foundElevator = true;
-						break;
+						//om de är på samma våning och hissen inte stänger dörren
+						if (p.getPosition() == elevators.get(i).currentlyAtFloor && elevators.get(i).leaving){
+						} else {
+							elev.addToQueue(p.getPosition());
+							System.out.println("1: Elevator "+i+ " queues person "+p.getID()+ " request to floor "+p.getPosition() );
+							temp.add(p);
+							foundElevator = true;
+							break;
+						}
 					}
 				}
 				//if both elevator and person is moving down, put the person in queue for pick up
 				else if ((p.getDirection() == elev.direction) && elev.direction == 2) {
 					if (p.getPosition() <= elev.currentlyAtFloor){
+						if (!(p.getPosition() == elevators.get(i).currentlyAtFloor && !elevators.get(i).leaving)){
+							elev.addToQueue(p.getPosition());
+							System.out.println("2: Elevator "+i+ " queues person "+p.getID()+ " request to floor "+p.getPosition() );
 
-						elev.addToQueue(p.getPosition());
-						System.out.println("2: Elevator "+i+ " queues person "+p.getID()+ " request to floor "+p.getPosition() );
-
-						temp.add(p);
-						foundElevator = true;
-						break;
+							temp.add(p);
+							foundElevator = true;
+							break;
+						}
 					}
 				}
 				//if the elevator is idle, if will be put in a list among other idle elevators
@@ -85,9 +89,9 @@ public class BasicStrat implements ElevatorStrategy{
 				//update the elevators direction to not be idle
 				elevators.get(chosenElevator).setDirection(computeDirection(elevators.get(chosenElevator), p));
 				System.out.println("Direction: " + elevators.get(chosenElevator).direction);
-				
+
 			}
-			
+
 		}
 		for (Person tempP : temp) {
 			waitingList.remove(tempP);
