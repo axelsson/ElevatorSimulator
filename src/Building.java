@@ -27,8 +27,10 @@ public class Building {
 	ZoneStrat Zone = new ZoneStrat();
 	ElevatorStrategy [] strategies={Simple , Zone};	
 	Random r = new Random();
+	int strategy = 0;
 
-	public Building(int nrfloors, int nrElevators, boolean arrivalValue) { 
+	public Building(int nrfloors, int nrElevators, boolean arrivalValue, int strat) { 
+		int strategy = strat;
 		arrival = arrivalValue;
 		floors = nrfloors;
 		time = 0;
@@ -44,14 +46,14 @@ public class Building {
 		}
 	}
 	public static void main(String[] args){
-		Building building = new Building(5,2, true);
+		Building building = new Building(5,2, false, 0);
 		building.run();
 		building.finished();
 		//TODO fix exp dist. 
 		ExponentialDistribution e = new ExponentialDistribution(1.0);
 		System.out.println(e.sample());
 	}
-	
+
 	//arrivalFloor returns a floor from which the newly generated person will arrive
 	public int arrivalFloor(){
 		// floor 0 is the default entrance of the building
@@ -62,7 +64,7 @@ public class Building {
 				floor = Math.abs(r.nextInt()%floors);
 			}
 		}
-		
+
 		return floor;
 	}
 	public Person generatePerson(){
@@ -94,6 +96,7 @@ public class Building {
 
 	private void run() {
 		boolean timer = true;
+		ElevatorStrategy str = strategies[strategy];
 		while (timer){
 			System.out.println("--------------------------------Time: "+time+"---------------------------");
 			//generates persons with help from a exponential distribution
@@ -102,18 +105,18 @@ public class Building {
 				//add the new person to their current floor
 				Floor currentFloor = floorList.get(newPerson.getPosition());
 				currentFloor.addPerson(newPerson);
-				
+
 				//the new person will push the button on the floor unless it's already pushed
 				if (newPerson.direction == 1){
 					if (!currentFloor.isbtnUpOn()){
 						currentFloor.setbtnUpOn(true);
-						strategies[0].addToWaitingList(newPerson);
+						str.addToWaitingList(newPerson);
 					}
 				}
 				else {
 					if (!currentFloor.isbtnDownOn()){
 						currentFloor.setbtnDownOn(true);
-						strategies[0].addToWaitingList(newPerson);
+						str.addToWaitingList(newPerson);
 					}
 				}
 				System.out.println("new person "+  newPerson.getID()+" at: "+ newPerson.getPosition() +" dest: "+newPerson.getDestination());
@@ -121,9 +124,17 @@ public class Building {
 				peopleInSystem.add(newPerson);
 				id++;
 				//getElevator places the new person in the right queue and handles waiting persons
-				
 			}
-			strategies[0].getElevator(elevators);
+			for (Elevator e : elevators) {
+				if (e.denied.size() > 0){
+					for (Person p : e.denied) {
+						str.addToWaitingList(p);
+					}
+					e.denied.clear();
+				}
+			}
+
+			str.getElevator(elevators);
 			//timestep 
 			for (Elevator elevator : elevators) {
 				elevator.timeStep(time, floorList);

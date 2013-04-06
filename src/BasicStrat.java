@@ -45,6 +45,7 @@ public class BasicStrat implements ElevatorStrategy{
 
 			for (int i = 0; i < elevators.size(); i++) {
 				Elevator elev = elevators.get(i);
+				if (elev.full){continue;}
 				//if both elevator and person is moving up, put the person in queue for pick up
 				if ((p.getDirection() == elev.direction) && elev.direction == 1) {
 					if (p.getPosition() >= elevators.get(i).currentlyAtFloor){
@@ -62,10 +63,10 @@ public class BasicStrat implements ElevatorStrategy{
 				//if both elevator and person is moving down, put the person in queue for pick up
 				else if ((p.getDirection() == elev.direction) && elev.direction == 2) {
 					if (p.getPosition() <= elev.currentlyAtFloor){
-						if (!(p.getPosition() == elevators.get(i).currentlyAtFloor && !elevators.get(i).leaving)){
+						if (p.getPosition() == elevators.get(i).currentlyAtFloor && elevators.get(i).leaving){
+						} else {
 							elev.addToQueue(p.getPosition());
 							System.out.println("2: Elevator "+i+ " queues person "+p.getID()+ " request to floor "+p.getPosition() );
-
 							temp.add(p);
 							foundElevator = true;
 							break;

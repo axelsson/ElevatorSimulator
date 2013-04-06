@@ -9,11 +9,13 @@ public class Elevator {
 	int floors = 1;
 	int entrance = 0;
 	int currentlyAtFloor = 0;
+	boolean full = false;
 	//direction: 0 = not moving, 1= up, 2 = down
 	public int direction = 0;		
 	int capacity = 8;	
 	boolean leaving = false;
 	ArrayList<Person> personsInside = new ArrayList<Person>();
+	ArrayList<Person> denied = new ArrayList<Person>();
 	PriorityQueue<Integer> queue = new PriorityQueue<Integer>(10, new Comparator<Integer>() {	
 		//compare sorts the queue in different orders depending on the direction of the elevator
 		public int compare(Integer o1, Integer o2) {
@@ -53,7 +55,6 @@ public class Elevator {
 
 	}
 	// move the elevator a timestep
-	//TODO problem: strategy köar fast dörrarna stängs
 	public void timeStep(int time, ArrayList<Floor> floorList){
 		
 		System.out.println("Elevator "+this.id+ " at floor: "+ this.currentlyAtFloor);
@@ -85,7 +86,7 @@ public class Elevator {
 			leaving = false;
 		}
 		System.out.println("waiting time: "+ wait);
-		System.out.println("Elevator "+ this.id + " queue " + this.queue.toString());
+		System.out.println("Elevator "+ this.id + " queue " + this.queue.toString()+ " persons inside: "+ personsInside.size());
 		if (wait > 0){
 			wait -= 1;
 			if (wait <= 2){
@@ -119,7 +120,10 @@ public class Elevator {
 			//separate removal to avoid concurrency problems
 			for (Person person : temp) {
 				personsInside.remove(person);
-			}	
+			}
+			if (personsInside.size() < capacity ){
+				full = false;
+			}
 
 		}
 		// add persons to elevator
@@ -131,18 +135,26 @@ public class Elevator {
 				if (direction == 0){
 					direction = person.getDirection();
 				}
+				//if full, the elevator will deny them and they'll be added to the waitinglist again
+				if (full){
+					denied.add(person);
+					System.out.println("DENIED PERSON");
+					continue;
+				}
 				personsInside.add(person);
 				this.addToQueue(person.getDestination());
 				person.setWaitingTime(time);
 				System.out.println("Elevator "+this.id+" just queued person "+person.getID()+ " for floor "+person.getDestination()+" with waitingtime "+ person.getWaitingTime());
 				temp.add(person);
+				if (personsInside.size() == capacity){
+					full = true;
+				}
 			}
 		}
 
 		//remove persons afterwards to avoid concurrency problem
 		for (Person person : temp) {
 			floor.removePerson(person);
-
 			//reset up/down buttons
 			if (person.direction == 1){
 				floor.setbtnUpOn(false);

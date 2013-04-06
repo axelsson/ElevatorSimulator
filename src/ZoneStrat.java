@@ -27,6 +27,7 @@ public class ZoneStrat implements ElevatorStrategy{
 
 			System.out.println("chosen zone: " + zone);
 			Elevator elev = elevators.get(i);
+			if (elev.full){continue;}
 			//if both elevator and person is moving up, put the person in queue for pick up
 			if ((p.getDirection() == elev.direction) && elev.direction == 1) {
 				if (p.getPosition() >= elevators.get(i).currentlyAtFloor){
