@@ -101,7 +101,7 @@ public class Elevator {
 		queue.poll();
 		//Time added for opening and closing doors
 		if (wait == 0){
-			wait += 4;}
+			wait += 6;}
 		if (this.queue.isEmpty()){
 			direction = 0;
 		}

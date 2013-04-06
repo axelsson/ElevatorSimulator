@@ -89,8 +89,6 @@ public class BasicStrat implements ElevatorStrategy{
 				temp.add(p);
 				//update the elevators direction to not be idle
 				elevators.get(chosenElevator).setDirection(computeDirection(elevators.get(chosenElevator), p));
-				System.out.println("Direction: " + elevators.get(chosenElevator).direction);
-
 			}
 
 		}

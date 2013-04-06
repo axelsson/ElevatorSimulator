@@ -46,12 +46,9 @@ public class Building {
 		}
 	}
 	public static void main(String[] args){
-		Building building = new Building(5,2, false, 0);
+		Building building = new Building(10,2, false, 0);
 		building.run();
-		building.finished();
-		//TODO fix exp dist. 
-		ExponentialDistribution e = new ExponentialDistribution(1.0);
-		System.out.println(e.sample());
+		building.finished();		
 	}
 
 	//arrivalFloor returns a floor from which the newly generated person will arrive
@@ -91,16 +88,23 @@ public class Building {
 			totalTime += p.getTotalTime();
 		}
 		System.out.println("*****************************************");
-		System.out.println("Mean total time in system: "+ totalTime/size+"\n"+ "Mean waiting time: "+waitingTime/size);
+		if(size > 0){
+			System.out.println("Mean total time in system: "+ totalTime/size+"\n"+ "Mean waiting time: "+waitingTime/size);
+		}
+		System.out.println("Persons in system: "+size);
 	}
 
 	private void run() {
-		boolean timer = true;
 		ElevatorStrategy str = strategies[strategy];
-		while (timer){
+		//we expect 150 arrivals in an hour
+		ExponentialDistribution e = new ExponentialDistribution(1,300);
+		int timeForArrival = (int)(e.sample()*20);
+		//run for 1200 = 3600s = 1hr
+		// 120/3 = 40s, 300/60 = 5pers/min
+		while (time < 120){
 			System.out.println("--------------------------------Time: "+time+"---------------------------");
 			//generates persons with help from a exponential distribution
-			if (true){
+			if (timeForArrival == time){
 				Person newPerson = generatePerson();
 				//add the new person to their current floor
 				Floor currentFloor = floorList.get(newPerson.getPosition());
@@ -123,14 +127,15 @@ public class Building {
 				//generate person from poisson distribution
 				peopleInSystem.add(newPerson);
 				id++;
-				//getElevator places the new person in the right queue and handles waiting persons
+				//generate the new time for arrival
+				timeForArrival = (int)(e.sample()*20)+time;
 			}
-			for (Elevator e : elevators) {
-				if (e.denied.size() > 0){
-					for (Person p : e.denied) {
+			for (Elevator elev : elevators) {
+				if (elev.denied.size() > 0){
+					for (Person p : elev.denied) {
 						str.addToWaitingList(p);
 					}
-					e.denied.clear();
+					elev.denied.clear();
 				}
 			}
 
@@ -140,10 +145,10 @@ public class Building {
 				elevator.timeStep(time, floorList);
 			}
 			time++;
-			if (time == 75){
-				timer = false;
-			}
 		}
+		//		for (int i = 0; i <40; i++) {
+		//			System.out.println((int)((e.sample())*20));
+		//		}
 	}
 
 }
