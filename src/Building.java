@@ -30,7 +30,7 @@ public class Building {
 	int strategy = 0;
 
 	public Building(int nrfloors, int nrElevators, boolean arrivalValue, int strat) { 
-		int strategy = strat;
+		strategy = strat;
 		arrival = arrivalValue;
 		floors = nrfloors;
 		time = 0;
@@ -97,11 +97,11 @@ public class Building {
 	private void run() {
 		ElevatorStrategy str = strategies[strategy];
 		//we expect 150 arrivals in an hour
-		ExponentialDistribution e = new ExponentialDistribution(1,300);
+		ExponentialDistribution e = new ExponentialDistribution(1,600);
 		int timeForArrival = (int)(e.sample()*20);
 		//run for 1200 = 3600s = 1hr
 		// 120/3 = 40s, 300/60 = 5pers/min
-		while (time < 120){
+		while (time < 180){
 			System.out.println("--------------------------------Time: "+time+"---------------------------");
 			//generates persons with help from a exponential distribution
 			if (timeForArrival == time){
@@ -146,9 +146,9 @@ public class Building {
 			}
 			time++;
 		}
-		//		for (int i = 0; i <40; i++) {
-		//			System.out.println((int)((e.sample())*20));
-		//		}
+				for (int i = 0; i <40; i++) {
+					System.out.println((int)((e.sample())*20));
+				}
 	}
 
 }

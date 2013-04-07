@@ -58,7 +58,6 @@ public class ZoneStrat implements ElevatorStrategy{
 		for (Person tempP : temp) {
 			waitingList.remove(tempP);
 		}
-		System.out.println("//////////////////////////////");
 	}
 
 	public int computeDirection(Elevator e, Person p){
