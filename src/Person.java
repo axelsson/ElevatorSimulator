@@ -3,6 +3,7 @@ public class Person {
 	
 	private int currentlyAt;
 	private int destination;
+	public int distance;
 	//direction: 0 = not moving, 1= up, 2 = down
 	int direction = 0;	
 	private int startTime, waitingTime, totalTime;
@@ -12,6 +13,7 @@ public class Person {
 	public Person(int id, int dest, int atFloor, int time) {
 		this.currentlyAt = atFloor;
 		this.destination = dest;
+		this.distance = Math.abs(this.currentlyAt-this.destination);
 		this.startTime = time;
 		this.id = id;
 		if (currentlyAt < destination){

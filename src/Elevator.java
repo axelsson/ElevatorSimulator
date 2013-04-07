@@ -2,17 +2,18 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 public class Elevator {
-	int zoneBegins = 0;
-	int zoneEnds = 0;
 	int wait = 0;
 	int id;
 	int floors = 1;
 	int entrance = 0;
 	int currentlyAtFloor = 0;
+	int totalTravel = 0;
+	int pickedUp = 0;
+	int personDistance = 0;
 	boolean full = false;
 	//direction: 0 = not moving, 1= up, 2 = down
 	public int direction = 0;		
-	int capacity = 8;	
+	int capacity = 10;	
 	boolean leaving = false;
 	ArrayList<Person> personsInside = new ArrayList<Person>();
 	ArrayList<Person> denied = new ArrayList<Person>();
@@ -82,6 +83,7 @@ public class Elevator {
 					currentlyAtFloor -= 1;
 					System.out.println("Elevator moving down to: "+currentlyAtFloor);
 				}
+				totalTravel++;
 			}
 			leaving = false;
 		}
@@ -142,6 +144,8 @@ public class Elevator {
 					continue;
 				}
 				personsInside.add(person);
+				pickedUp++;
+				personDistance += person.distance;
 				this.addToQueue(person.getDestination());
 				person.setWaitingTime(time);
 				System.out.println("Elevator "+this.id+" just queued person "+person.getID()+ " for floor "+person.getDestination()+" with waitingtime "+ person.getWaitingTime());
