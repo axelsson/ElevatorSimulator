@@ -62,9 +62,15 @@ public class Elevator {
 		//elevator is just closing its doors and no one can enter
 
 		//checks if the elevator is picking up/dropping people
-		if (queue.contains(this.currentlyAtFloor)==true && leaving == false){
+
+		if (queue.contains(this.currentlyAtFloor) && !leaving && (floorList.get(currentlyAtFloor).pushedButton() ||  !this.personsInside.isEmpty())){
 			System.out.println("Elevator stops at floor: "+currentlyAtFloor);
 			requestAtFloor(time, floorList);
+		}
+		//if the elevators has moved to its default floor
+		//problem: köar destination, om person på samma ankommer, fattar inte strategin att klivit på
+		if (queue.contains(this.currentlyAtFloor) && !(floorList.get(currentlyAtFloor).pushedButton())){
+			queue.poll();
 		}
 		if (queue.isEmpty()){
 			this.direction = 0;

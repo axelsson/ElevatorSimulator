@@ -44,6 +44,13 @@ public class Floor {
         return waiting;
     }
 	
+	public boolean pushedButton(){
+		if (btnUp == true || btnDown == true){
+			return true;
+		}
+		else{return false;}
+	}
+	
 	//Get a list of all the people finished who started on this floor
 	public ArrayList<Person> getPeopleFinished() {
         ArrayList<Person> finished = new ArrayList<Person>();

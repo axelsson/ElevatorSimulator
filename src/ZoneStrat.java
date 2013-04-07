@@ -58,6 +58,21 @@ public class ZoneStrat implements ElevatorStrategy{
 		for (Person tempP : temp) {
 			waitingList.remove(tempP);
 		}
+
+		//ge hissen order om att åka till default om den inte har någon i sin kö
+		for (int i = 0; i < elevators.size(); i++) {
+			Elevator t = elevators.get(i);
+			if (t.queue.isEmpty() && t.wait == 0){
+				int defaultFloor = floors/4;
+				if(i == 1){
+					defaultFloor = (int) (floors*0.75);
+				}
+				if(t.currentlyAtFloor == defaultFloor){continue;}
+				t.queue.add(defaultFloor);
+				if (t.currentlyAtFloor > defaultFloor){t.direction = 2;}
+				else{t.direction = 1;}
+			}
+		}
 	}
 
 	public int computeDirection(Elevator e, Person p){

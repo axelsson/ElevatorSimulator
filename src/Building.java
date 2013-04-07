@@ -39,7 +39,7 @@ public class Building {
 	}
 	public static void main(String[] args){
 									//floors, elevators, type, stategy
-		Building building = new Building(10,2, 1, 0);
+		Building building = new Building(10,2, 2, 1);
 		building.run();
 		building.finished();		
 	}
@@ -113,10 +113,12 @@ public class Building {
 		ElevatorStrategy str = strategies[strategy];
 		//we expect 300 arrivals in an hour
 		//lambda = 1/4 since we expect 1 arrival per 12 sec == 4 time units, the mean is therefore 1/0.25
+		// new value for 2hrs/300 persons: 1/0.25
 		ExponentialDistribution e = new ExponentialDistribution((1/0.125));
 		int timeForArrival = (int)(e.sample());
 		test.add(timeForArrival);
-		while (time < 2400){
+		//time 2400 = 2h 
+		while (time < 100){
 			System.out.println("--------------------------------Time: "+time+"---------------------------");
 			//generates persons with help from a exponential distribution
 			if (timeForArrival == time){
