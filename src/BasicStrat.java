@@ -27,15 +27,7 @@ public class BasicStrat implements ElevatorStrategy{
 		return chosenOne.getId();
 	}
 
-	/*kolla om idle är närmare än hiss på rätt väg 
-	person skapas när hiss precis ankommer till ett request på entreplan
-	direction hinner inte ändras innan denne köas till fel hiss. 
-	köerna inte särskilda, "elev1 köar p1 på floor 0, elev0 köar p1 till floor 4" 
-	fel i basicstrat som köar i fel hiss
-
-	om hissen är på väg uppåt för att hämta folk som ska neråt, spara bara det översta requestet
-	TODO check for full elevator*/
-	public void getElevator( ArrayList<Elevator> elevators) {
+	public void getElevator( ArrayList<Elevator> elevators, int type, ArrayList<Floor> floorList) {
 
 		ArrayList<Person> temp = new ArrayList<Person>();
 

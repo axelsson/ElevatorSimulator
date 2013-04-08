@@ -10,6 +10,7 @@ public class Elevator {
 	int totalTravel = 0;
 	int pickedUp = 0;
 	int personDistance = 0;
+	boolean movingToDefault = false;
 	boolean full = false;
 	//direction: 0 = not moving, 1= up, 2 = down
 	public int direction = 0;		
@@ -37,8 +38,9 @@ public class Elevator {
 			return 1; }
 	});
 
-	public Elevator(int floors, int entrance, int id1) {
+	public Elevator(int floors, int startAt, int id1) {
 		this.floors = floors;
+		this.currentlyAtFloor = startAt;
 		id = id1;
 	}
 
@@ -68,7 +70,6 @@ public class Elevator {
 			requestAtFloor(time, floorList);
 		}
 		//if the elevators has moved to its default floor
-		//problem: köar destination, om person på samma ankommer, fattar inte strategin att klivit på
 		if (queue.contains(this.currentlyAtFloor) && !(floorList.get(currentlyAtFloor).pushedButton())){
 			queue.poll();
 		}
@@ -78,7 +79,6 @@ public class Elevator {
 		System.out.println("in elevator: direction of elevator: "+this.direction);
 
 		//move the elevator one step towards the next queued floor
-		//move towards "default" floor: don't change direction from 0?
 		if (wait == 0){
 			if (!(direction == 0)){
 				if(queue.peek()>this.currentlyAtFloor){

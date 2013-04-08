@@ -16,7 +16,7 @@ public class ZoneStrat implements ElevatorStrategy{
 
 	/*om hissen är på väg uppåt för att hämta folk som ska neråt, spara bara det översta requestet
 	TODO check for full elevator*/
-	public void getElevator( ArrayList<Elevator> elevators) {
+	public void getElevator( ArrayList<Elevator> elevators, int type, ArrayList<Floor> floorList) {
 
 		ArrayList<Person> temp = new ArrayList<Person>();
 		int floors = elevators.get(0).floors;
@@ -25,7 +25,7 @@ public class ZoneStrat implements ElevatorStrategy{
 			int zone = getZone(p.getPosition(), floors);
 			int i = zone;
 
-			System.out.println("chosen zone: " + zone);
+			//System.out.println("chosen zone: " + zone);
 			Elevator elev = elevators.get(i);
 			if (elev.full){continue;}
 			//if both elevator and person is moving up, put the person in queue for pick up
