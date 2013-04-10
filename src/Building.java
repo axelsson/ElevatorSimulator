@@ -50,8 +50,8 @@ public class Building {
 	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException{
 									//floors, elevators, type, stategy
 		pw = new PrintWriter("output.csv");
-		for (int i = 0; i < 10; i++) {
-			Building building = new Building(10,2, 0, 2);
+		for (int i = 0; i < 1; i++) {
+			Building building = new Building(10,2, 1, 2);
 			building.run();
 			building.finished();
 		}
