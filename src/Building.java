@@ -19,8 +19,9 @@ public class Building {
 	// creates the different strategies and puts them in a list to be accessible
 	BasicStrat Simple = new BasicStrat();
 	ZoneStrat Zone = new ZoneStrat();
-	OptimizedStrat Opt = new OptimizedStrat();
-	ElevatorStrategy [] strategies={Simple , Zone, Opt};	
+	OptimizedStrat Opt2 = new OptimizedStrat();
+	Opt1Strat Opt1 = new Opt1Strat();
+	ElevatorStrategy [] strategies={Simple , Zone, Opt1, Opt2};	
 	Random r = new Random();
 	int strategy = 0;
 	static PrintWriter pw;
@@ -50,8 +51,8 @@ public class Building {
 	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException{
 									//floors, elevators, type, stategy
 		pw = new PrintWriter("output.csv");
-		for (int i = 0; i < 1; i++) {
-			Building building = new Building(10,2, 1, 2);
+		for (int i = 0; i < 100; i++) {
+			Building building = new Building(10,2, 2, 3);
 			building.run();
 			building.finished();
 		}
@@ -136,11 +137,11 @@ public class Building {
 		//we expect 300 arrivals in an hour
 		//lambda = 1/4 since we expect 1 arrival per 12 sec == 4 time units, the mean is therefore 1/0.25
 		// new value for 2hrs/300 persons: 1/0.125
-		ExponentialDistribution e = new ExponentialDistribution((1/0.125));
+		ExponentialDistribution e = new ExponentialDistribution((1/0.25));
 		int timeForArrival = (int)(e.sample());
 		test.add(timeForArrival);
 		//time 2400 = 2h 
-		while (time < 2400){
+		while (time < 1200){
 			System.out.println("--------------------------------Time: "+time+"---------------------------");
 			//generates persons with help from a exponential distribution
 			if (timeForArrival == time){

@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-
+//first version of optimizations implemented on the basic strategy
 public class Opt1Strat implements ElevatorStrategy{
 
 	Queue<Person> waitingList = new LinkedList<Person>();
@@ -43,27 +43,6 @@ public class Opt1Strat implements ElevatorStrategy{
 				Elevator elev = elevators.get(i);
 				if (elev.full){continue;}
 				
-				if(p.getDirection() == 2){
-					//if the queue contains the floor right under and only that floors downbutton is pushed
-					if (elev.personsInside.isEmpty() && elev.queue.contains(p.getPosition()-1) && (floorList.get(p.getPosition()-1).isbtnDownOn()) && !(floorList.get(p.getPosition()-1).isbtnUpOn())) {
-						elev.queue.remove(p.getPosition()-1);
-						elev.queue.add(p.getPosition());
-						temp.add(p);
-						foundElevator = true;
-						System.out.println("SPECIAL QUEUE 1 elevator "+elev.id+" person "+p.getID());
-						break;
-					}}
-				if(p.getDirection() == 1){
-					//if the queue contains the floor right under and only that floors downbutton is pushed
-					if (elev.personsInside.isEmpty() && elev.queue.contains(p.getPosition()+1) && (floorList.get(p.getPosition()+1).isbtnUpOn()) && !(floorList.get(p.getPosition()+1).isbtnDownOn())) {
-						elev.queue.remove(p.getPosition()+1);
-						elev.queue.add(p.getPosition());
-						temp.add(p);
-						foundElevator = true;
-						System.out.println("SPECIAL QUEUE 2 elevator "+elev.id);
-						break;
-					}}
-				
 				//if both elevator and person is moving up, put the person in queue for pick up
 				if ((p.getDirection() == elev.direction) && elev.direction == 1) {
 					if (p.getPosition() >= elevators.get(i).currentlyAtFloor){
@@ -93,18 +72,13 @@ public class Opt1Strat implements ElevatorStrategy{
 				}
 				//if the elevator is idle, if will be put in a list among other idle elevators
 				//and the closest one will be chosen.
-				else if (elev.direction == 0 || elev.movingToDefault){
+				else if (elev.direction == 0 ){
 					idleElevators.add(elevators.get(i));
 				}
 			} 
 			if (!idleElevators.isEmpty() && foundElevator == false){
 				int chosenElevator = choseIdle(idleElevators, p.getPosition());
 				elevators.get(chosenElevator);
-				//if the elevator was moving to the default floor we need to reset the queue
-				if (elevators.get(chosenElevator).movingToDefault){
-					elevators.get(chosenElevator).queue.poll();
-					elevators.get(chosenElevator).movingToDefault = false;
-				}
 				
 				elevators.get(chosenElevator).addToQueue(p.getPosition());
 				System.out.println("3: Elevator "+chosenElevator+ " queues person "+p.getID()+ " request to floor "+p.getPosition() );	
